@@ -1,0 +1,8 @@
+#+TITLE: Quantum.jl
+#+AUTHOR: Stefanos Carlström
+#+EMAIL: stefanos.carlstrom@gmail.com
+
+[[https://travis-ci.org/jagot/Quantum.jl][https://travis-ci.org/jagot/Quantum.jl.svg?branch=master]]
+[[https://coveralls.io/github/jagot/Quantum.jl?branch=master][https://coveralls.io/repos/github/jagot/Quantum.jl/badge.svg?branch=master]]
+[[http://codecov.io/gh/jagot/Quantum.jl][http://codecov.io/gh/jagot/Quantum.jl/branch/master/graph/badge.svg]]
+
