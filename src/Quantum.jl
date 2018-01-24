@@ -1,5 +1,12 @@
-module Quantum
+__precompile__(true)
 
-# package code goes here
+module Quantum
+using FEDVR
+
+include("orderings.jl")
+include("potentials.jl")
+include("spherical-tensors.jl")
+include("hamiltonians.jl")
+include("eigenstates.jl")
 
 end # module
