@@ -1,0 +1,12 @@
+name = "Quantum"
+uuid = "93e72704-9be5-11e8-0ffe-431d31c770c7"
+authors = ["Stefanos Carlström <stefanos.carlstrom@gmail.com>"]
+version = "0.1.0"
+
+[deps]
+BlockMaps = "d8394ddc-3346-5325-9a2b-8a6d3660a8c1"
+FEDVR = "7f64dc6e-ccd1-5a31-8826-1dc29b280c7c"
+ILU = "941385f0-79da-5421-9c50-d102b46807ac"
+JacobiDavidson = "fd795f73-754d-5c78-89b0-a665909c47a9"
+LinearMaps = "7a12625a-238d-50fd-b39a-03d52299707e"
+WignerSymbols = "9f57e263-0b3d-5e2e-b1be-24f2bb48858b"
