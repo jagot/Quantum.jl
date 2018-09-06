@@ -1,3 +1,5 @@
+using SparseArrays
+
 function hamiltonian(basis::FEDVR.Basis, ℓs::AbstractVector;
                      v::Function=coulomb(1.0),
                      ordering=lexical_ordering(basis))
@@ -12,7 +14,7 @@ function hamiltonian(basis::FEDVR.Basis, ℓs::AbstractVector;
         Vℓ = potop(basis, v(ℓ)).lmap
         for b in T.blocks
             nn = size(b.a,2)
-            H₀[ordering.(ℓ-ℓ₀,(1:nn)+(b.i-1)),ordering.(ℓ-ℓ₀,(1:nn)+(b.j-1))] += b.a
+            H₀[ordering.(ℓ-ℓ₀,(1:nn) .+ (b.i-1)), ordering.(ℓ-ℓ₀,(1:nn) .+ (b.j-1))] += b.a
         end
         H₀[ordering.(ℓ-ℓ₀,1:m),ordering.(ℓ-ℓ₀,1:m)] += Vℓ
     end
