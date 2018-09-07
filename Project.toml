@@ -4,10 +4,10 @@ authors = ["Stefanos Carlström <stefanos.carlstrom@gmail.com>"]
 version = "0.1.0"
 
 [deps]
+ArnoldiMethod = "ec485272-7323-5ecc-a04f-4719b315124d"
 BlockMaps = "d8394ddc-3346-5325-9a2b-8a6d3660a8c1"
 FEDVR = "7f64dc6e-ccd1-5a31-8826-1dc29b280c7c"
-ILU = "941385f0-79da-5421-9c50-d102b46807ac"
-JacobiDavidson = "fd795f73-754d-5c78-89b0-a665909c47a9"
+LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 LinearMaps = "7a12625a-238d-50fd-b39a-03d52299707e"
 SparseArrays = "2f01184e-e22b-5df5-ae63-d93ebab69eaf"
 WignerSymbols = "9f57e263-0b3d-5e2e-b1be-24f2bb48858b"
