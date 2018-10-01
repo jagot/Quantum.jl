@@ -1,46 +1,98 @@
 using SparseArrays
+using SphericalOperators
 
-function hamiltonian(basis::FEDVR.Basis, ℓs::AbstractVector;
-                     v::Function=coulomb(1.0),
-                     ordering=lexical_ordering(basis))
-    T = kinop(basis) # One body operator, identical for all partial waves
+import SphericalOperators: ord
 
-    m = basecount(basis.grid)
-    M = m*length(ℓs)
+function hamiltonian(basis::FEDVR.Basis, L::AbstractSphericalBasis,
+                     ::Type{O}=SphericalOperators.LexicalOrdering;
+                     v::Function=coulomb(1.0)) where {O<:SphericalOperators.Ordering}
+    nᵣ = basecount(basis.grid)
+    @assert nᵣ == size(L,2)
+    M = prod(size(L))
     H₀ = spzeros(M,M)
 
-    ℓ₀ = ℓs[1]
-    for ℓ in ℓs
+    T = sparse(kinop(basis)) # One-body operator, identical for all partial waves
+    rsel = 1:nᵣ
+
+    for ℓ in eachℓ(L)
         Vℓ = potop(basis, v(ℓ)).lmap
-        for b in T.blocks
-            nn = size(b.a,2)
-            H₀[ordering.(ℓ-ℓ₀,(1:nn) .+ (b.i-1)), ordering.(ℓ-ℓ₀,(1:nn) .+ (b.j-1))] += b.a
+        Hℓ = T + Vℓ
+        for m in eachm(L,ℓ)
+            sel = ord(L,O,ℓ,m,rsel)
+            H₀[sel,sel] += Hℓ
         end
-        H₀[ordering.(ℓ-ℓ₀,1:m),ordering.(ℓ-ℓ₀,1:m)] += Vℓ
     end
 
     H₀
 end
-hamiltonian(basis::FEDVR.Basis, ℓ::Integer; kwargs...) = hamiltonian(basis, [ℓ]; kwargs...)
+hamiltonian(basis::FEDVR.Basis, ℓ::Integer; kwargs...) =
+    hamiltonian(basis, SphericalBasis2d(ℓ,basecount(basis.grid),ℓₘᵢₙ=ℓ); kwargs...)
 
-function hamiltonian_E_R(basis::FEDVR.Basis, ℓs::AbstractVector;
-                         ordering=lexical_ordering(basis))
+
+function hamiltonian_E_R(basis::FEDVR.Basis, L::AbstractSphericalBasis, component=:z,
+                         ::Type{O}=SphericalOperators.LexicalOrdering) where {O<:SphericalOperators.Ordering}
     """Dipole interaction Hamiltonian in the length gauge
     Ĥᵢ(t) = 𝓔(t)⋅r, where r = [x,y,z]."""
-    R = potop(basis, r -> r)
-
     m = basecount(basis.grid)
-    M = m*length(ℓs)
+    @assert m == size(L,2)
+    M = prod(size(L))
     Hᵢ = spzeros(M,M)
 
-    ℓ₀ = ℓs[1]
-    for ℓ in ℓs[1:end-1]
-        zℓ = C(1,ℓ,ℓ+1)*R.lmap
-        Hᵢ[ordering.(ℓ-ℓ₀,1:m),ordering.(ℓ-ℓ₀+1,1:m)] = zℓ
-        Hᵢ[ordering.(ℓ-ℓ₀+1,1:m),ordering.(ℓ-ℓ₀,1:m)] = zℓ
-    end
+    R = potop(basis, r -> r).lmap
+    rℓ = ℓ -> R
+
+    op = Dict(:z => SphericalOperators.ζ,
+              :x => SphericalOperators.ξ)[component]
+
+    materialize!(Hᵢ, op, L, rℓ, rℓ, O)
 
     Hᵢ
 end
 
-export hamiltonian, hamiltonian_E_R
+function APℓ(basis::FEDVR.Basis, L::AbstractSphericalBasis, component=:z,
+             ::Type{O}=SphericalOperators.LexicalOrdering) where {O<:SphericalOperators.Ordering}
+    """Dipole interaction Hamiltonian in the velocity gauge
+    Ĥᵢ(t) = 𝓐(t)⋅p, where p = -im*[∂x,∂y,∂z]."""
+    m = basecount(basis.grid)
+    @assert m == size(L,2)
+    M = prod(size(L))
+    Hᵢ = spzeros(M,M)
+
+    R⁻¹ = potop(basis, r -> 1/r).lmap
+    𝔞 = ℓ -> (ℓ+1)*R⁻¹
+    𝔟 = ℓ -> -ℓ*R⁻¹
+
+    op = Dict(:z => SphericalOperators.ζ,
+              :x => SphericalOperators.ξ)[component]
+
+    materialize!(Hᵢ, op, L, 𝔞, 𝔟)
+
+    Hᵢ
+end
+
+function ∂ᵣ(basis::FEDVR.Basis, L::AbstractSphericalBasis, component=:z,
+            ::Type{O}=SphericalOperators.LexicalOrdering) where {O<:SphericalOperators.Ordering}
+    """Dipole interaction Hamiltonian in the velocity gauge
+    Ĥᵢ(t) = 𝓐(t)⋅p, where p = -im*[∂x,∂y,∂z]."""
+    m = basecount(basis.grid)
+    @assert m == size(L,2)
+    M = prod(size(L))
+    Hᵢ = spzeros(M,M)
+
+    ∂ᵣop = sparse(derop(basis, 1))
+    𝔞𝔟 = ℓ -> ∂ᵣop
+
+    op = Dict(:z => SphericalOperators.ζ,
+              :x => SphericalOperators.ξ)[component]
+
+    materialize!(Hᵢ, op, L, 𝔞𝔟, 𝔞𝔟)
+
+    Hᵢ
+end
+
+hamiltonian_A_P(basis::FEDVR.Basis, L::AbstractSphericalBasis,
+                component=:z,
+                ::Type{O}=SphericalOperators.LexicalOrdering) where {O<:SphericalOperators.Ordering} =
+                    APℓ(basis, L, component, O) + ∂ᵣ(basis, L, component, O)
+
+export hamiltonian, hamiltonian_E_R, hamiltonian_A_P

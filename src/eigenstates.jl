@@ -1,6 +1,8 @@
 using LinearAlgebra
 using LinearMaps
 using ArnoldiMethod
+using SphericalOperators
+import SphericalOperators: ord
 
 struct InverseMap{M} <: LinearMap{M}
     factorization
@@ -29,16 +31,18 @@ function ground_state(H, args...; kwargs...)
     real(λ[1]),real.(ϕ[:,1])
 end
 
-function ground_state(basis::FEDVR.Basis, ℓs::AbstractVector, ℓ₀::Integer, args...;
-                      ordering=lexical_ordering(basis),
-                      kwargs...)
-    ℓ₀ ∉ ℓs && error("Requested initial partial wave $(ℓ₀) not in range $(ℓs)")
+function ground_state(basis::FEDVR.Basis, L::AbstractSphericalBasis,
+                      ℓ₀::Integer, m₀::Integer=0,
+                      ::Type{O}=SphericalOperators.LexicalOrdering,
+                      args...; kwargs...) where {O<:SphericalOperators.Ordering}
+    ℓ₀ ∉ eachℓ(L) && error("Requested initial partial wave $(ℓ₀) not in range $(eachℓ(L))")
+    m₀ ∉ eachm(L,ℓ₀) && error("Requested initial projection quantum number $(m₀) not in range $(eachm(L,ℓ₀))")
     Hℓ₀ = hamiltonian(basis, ℓ₀)
 
-    m = basecount(basis.grid)
-    M = m*length(ℓs)
+    nᵣ = basecount(basis.grid)
+    M = prod(size(L))
     ψ₀ = zeros(M)
-    ψ₀[ordering.(ℓ₀-ℓs[1],1:m)] = ground_state(Hℓ₀, args...; kwargs...)[2]
+    ψ₀[ord(L,O,ℓ₀,m₀,1:nᵣ)] = ground_state(Hℓ₀, args...; kwargs...)[2]
     ψ₀
 end
 
