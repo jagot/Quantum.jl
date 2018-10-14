@@ -5,6 +5,7 @@ version = "0.1.0"
 
 [deps]
 ArnoldiMethod = "ec485272-7323-5ecc-a04f-4719b315124d"
+BSplines = "8759ff0c-cd99-11e8-1c1c-d94a817e6fcc"
 BlockMaps = "d8394ddc-3346-5325-9a2b-8a6d3660a8c1"
 FEDVR = "7f64dc6e-ccd1-5a31-8826-1dc29b280c7c"
 LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
