@@ -3,19 +3,39 @@ using SphericalOperators
 
 import SphericalOperators: ord
 
-function hamiltonian(basis::FEDVR.Basis, L::AbstractSphericalBasis,
-                     ::Type{O}=SphericalOperators.LexicalOrdering;
-                     v::Function=coulomb(1.0)) where {O<:SphericalOperators.Ordering}
-    nᵣ = basecount(basis.grid)
+import FEDVR: basecount, kinop
+using BlockMaps
+using BandedMatrices
+
+basecount(basis::FEDVR.Basis) = basecount(basis.grid)
+basecount(basis::BSplines.Basis) = length(basis.t) - BSplines.order(basis.t)
+
+kinop(basis::BSplines.Basis) = -BSplines.derop(basis, 2)/2
+
+function hamiltonian(basis::RBasis, L::AbstractSphericalBasis,
+                     V::Function=coulomb(1.0),
+                     ::Type{O}=SphericalOperators.LexicalOrdering) where {O<:SphericalOperators.Ordering}
+    nᵣ = basecount(basis)
     @assert nᵣ == size(L,2)
     M = prod(size(L))
-    H₀ = spzeros(M,M)
 
-    T = sparse(kinop(basis)) # One-body operator, identical for all partial waves
+    T = kinop(basis) # One-body operator, identical for all partial waves
+    if typeof(basis) <: FEDVR.Basis
+        # T = BlockMaps.banded(T) # This wastes approximately half the size on zeroes
+        T = sparse(T)
+    end
     rsel = 1:nᵣ
 
+    # H₀ = BandedMatrix(Zeros(M,M), bandwidths(T))
+    H₀ = spzeros(M,M)
+    # H₀ = if typeof(basis) <: FEDVR.Basis
+    #     spzeros(M,M)
+    # else
+    #     BandedMatrix(Zeros(M,M), bandwidths(T))
+    # end
+
     for ℓ in eachℓ(L)
-        Vℓ = potop(basis, v(ℓ)).lmap
+        Vℓ = basis(V(ℓ))
         Hℓ = T + Vℓ
         for m in eachm(L,ℓ)
             sel = ord(L,O,ℓ,m,rsel)
@@ -23,14 +43,14 @@ function hamiltonian(basis::FEDVR.Basis, L::AbstractSphericalBasis,
         end
     end
 
-    H₀
+    Symmetric(H₀)
 end
-hamiltonian(basis::FEDVR.Basis, ℓ::Integer; kwargs...) =
-    hamiltonian(basis, SphericalBasis2d(ℓ,basecount(basis.grid),ℓₘᵢₙ=ℓ); kwargs...)
+hamiltonian(basis::RBasis, ℓ::Integer, V::Function=coulomb(1.0); kwargs...) =
+    hamiltonian(basis, SphericalBasis2d(ℓ,basecount(basis),ℓₘᵢₙ=ℓ), V; kwargs...)
 
-function interaction_common(fun::Function, basis::FEDVR.Basis, L::AbstractSphericalBasis, component=:z,
+function interaction_common(fun::Function, basis::RBasis, L::AbstractSphericalBasis, component=:z,
                             ::Type{O}=SphericalOperators.LexicalOrdering) where {O<:SphericalOperators.Ordering}
-    m = basecount(basis.grid)
+    m = basecount(basis)
     @assert m == size(L,2)
     M = prod(size(L))
     Hᵢ = spzeros(M,M)
@@ -44,39 +64,39 @@ function interaction_common(fun::Function, basis::FEDVR.Basis, L::AbstractSpheri
 end
 
 
-function hamiltonian_E_R(basis::FEDVR.Basis, L::AbstractSphericalBasis, component=:z,
+function hamiltonian_E_R(basis::RBasis, L::AbstractSphericalBasis, component=:z,
                          ::Type{O}=SphericalOperators.LexicalOrdering) where {O<:SphericalOperators.Ordering}
     """Dipole interaction Hamiltonian in the length gauge
     Ĥᵢ(t) = 𝓔(t)⋅r, where r = [x,y,z]."""
     interaction_common(basis, L, component, O) do
-        R = potop(basis, r -> r).lmap
+        R = basis(r -> r)
         rℓ = ℓ -> R
         rℓ,rℓ
     end
 end
 
-function APℓ(basis::FEDVR.Basis, L::AbstractSphericalBasis, component=:z,
+function APℓ(basis::RBasis, L::AbstractSphericalBasis, component=:z,
              ::Type{O}=SphericalOperators.LexicalOrdering) where {O<:SphericalOperators.Ordering}
     """Dipole interaction Hamiltonian (centrifugal part) in the
     velocity gauge Ĥᵢ(t) = 𝓐(t)⋅p, where p = -im*[∂x,∂y,∂z]."""
     interaction_common(basis, L, component, O) do
-        R⁻¹ = potop(basis, r -> 1/r).lmap
+        R⁻¹ = basis(r -> 1/r)
         ℓ -> (ℓ+1)*R⁻¹,ℓ -> -ℓ*R⁻¹
     end
 end
 
-function ∂ᵣ(basis::FEDVR.Basis, L::AbstractSphericalBasis, component=:z,
+function ∂ᵣ(basis::RBasis, L::AbstractSphericalBasis, component=:z,
             ::Type{O}=SphericalOperators.LexicalOrdering) where {O<:SphericalOperators.Ordering}
     """Dipole interaction Hamiltonian (differential part) in the
     velocity gauge Ĥᵢ(t) = 𝓐(t)⋅p, where p = -im*[∂x,∂y,∂z]."""
     interaction_common(basis, L, component, O) do
-        ∂ᵣop = sparse(derop(basis, 1))
+        ∂ᵣop = derop(basis, 1)
         𝔞𝔟 = ℓ -> ∂ᵣop
         𝔞𝔟,𝔞𝔟
     end
 end
 
-hamiltonian_A_P(basis::FEDVR.Basis, L::AbstractSphericalBasis,
+hamiltonian_A_P(basis::RBasis, L::AbstractSphericalBasis,
                 component=:z,
                 ::Type{O}=SphericalOperators.LexicalOrdering) where {O<:SphericalOperators.Ordering} =
                     APℓ(basis, L, component, O) + ∂ᵣ(basis, L, component, O)

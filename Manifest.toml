@@ -6,17 +6,19 @@ version = "0.0.4"
 
 [[BSplines]]
 deps = ["BandedMatrices", "FastGaussQuadrature", "LinearAlgebra", "RecipesBase", "SparseArrays", "Test"]
-git-tree-sha1 = "75611fa120d6d8dce8a459a3e9565d31823c695d"
+git-tree-sha1 = "22efc093f3156944693a6df12903867c4f4e0604"
 repo-rev = "master"
 repo-url = "https://github.com/jagot/BSplines.jl.git"
 uuid = "8759ff0c-cd99-11e8-1c1c-d94a817e6fcc"
 version = "0.1.0"
 
 [[BandedMatrices]]
-deps = ["FillArrays", "LazyArrays", "LinearAlgebra", "Pkg", "Random", "SparseArrays", "Test"]
-git-tree-sha1 = "2adb58e3d08ee063b7d2c3d2112eb08ac0e578ec"
+deps = ["FillArrays", "LazyArrays", "LinearAlgebra", "Random", "SparseArrays", "Test"]
+git-tree-sha1 = "e610b54f701f7c09208404c775fffbf3ac3f043e"
+repo-rev = "cholesky"
+repo-url = "https://github.com/jagot/BandedMatrices.jl.git"
 uuid = "aae01518-5342-5314-be14-df237901396f"
-version = "0.6.0"
+version = "0.6.0+"
 
 [[Base64]]
 uuid = "2a0f44e3-6c83-55bd-87e4-b1978d98bd5f"
@@ -29,15 +31,15 @@ version = "0.8.10"
 
 [[BinaryProvider]]
 deps = ["Libdl", "Pkg", "SHA", "Test"]
-git-tree-sha1 = "38be61810f280c3c478f5c38aaf387f8f9199275"
+git-tree-sha1 = "9930c1a6cd49d9fcd7218df6be417e6ae4f1468a"
 uuid = "b99e7846-7c00-51b0-8f62-c81ae34c0232"
-version = "0.5.1"
+version = "0.5.2"
 
 [[BlockMaps]]
-deps = ["LinearAlgebra", "LinearMaps", "RecipesBase", "SparseArrays"]
-git-tree-sha1 = "a12cc9a5065e92797f28da09d86b48fb6b183bbd"
+deps = ["BandedMatrices", "LinearAlgebra", "LinearMaps", "RecipesBase", "SparseArrays"]
+git-tree-sha1 = "acf1ab63af96dc39cf88658da346d8a99962198e"
 repo-rev = "master"
-repo-url = "git@github.com:jagot/BlockMaps.jl.git"
+repo-url = "https://github.com/jagot/BlockMaps.jl.git"
 uuid = "d8394ddc-3346-5325-9a2b-8a6d3660a8c1"
 version = "0.1.0"
 
@@ -61,9 +63,9 @@ uuid = "8ba89e20-285c-5b6f-9357-94700520ee1b"
 
 [[FEDVR]]
 deps = ["BlockMaps", "FastGaussQuadrature", "LinearAlgebra", "LinearMaps", "RecipesBase", "SparseArrays", "Test"]
-git-tree-sha1 = "8769a29551f21cf518f4fa3f905ca74d4d9d38f1"
+git-tree-sha1 = "f496a514f883596642452d091966353f453a151c"
 repo-rev = "master"
-repo-url = "git@github.com:jagot/FEDVR.jl.git"
+repo-url = "https://github.com/jagot/FEDVR.jl.git"
 uuid = "7f64dc6e-ccd1-5a31-8826-1dc29b280c7c"
 version = "0.1.0"
 
@@ -74,10 +76,10 @@ uuid = "442a2c76-b920-505d-bb47-c5924d526838"
 version = "0.3.2"
 
 [[FillArrays]]
-deps = ["Compat", "LinearAlgebra", "Random", "SparseArrays"]
-git-tree-sha1 = "c80c54ba3341ffc3c64e817f742ce77564ad410c"
+deps = ["LinearAlgebra", "Random", "SparseArrays", "Test"]
+git-tree-sha1 = "d87b7fc5c086cf157deabec625d53ba55eca6436"
 uuid = "1a297f60-69ca-5386-bcde-b61e274b549b"
-version = "0.2.1"
+version = "0.3.0"
 
 [[InteractiveUtils]]
 deps = ["LinearAlgebra", "Markdown"]
