@@ -1,5 +1,5 @@
 [[ArnoldiMethod]]
-deps = ["DelimitedFiles", "LinearAlgebra", "Pkg", "Random", "SparseArrays", "StaticArrays", "Test"]
+deps = ["DelimitedFiles", "LinearAlgebra", "Random", "SparseArrays", "StaticArrays", "Test"]
 git-tree-sha1 = "2b6845cea546604fb4dca4e31414a6a59d39ddcd"
 uuid = "ec485272-7323-5ecc-a04f-4719b315124d"
 version = "0.0.4"
@@ -14,11 +14,9 @@ version = "0.1.0"
 
 [[BandedMatrices]]
 deps = ["FillArrays", "LazyArrays", "LinearAlgebra", "Random", "SparseArrays", "Test"]
-git-tree-sha1 = "e610b54f701f7c09208404c775fffbf3ac3f043e"
-repo-rev = "cholesky"
-repo-url = "https://github.com/jagot/BandedMatrices.jl.git"
+git-tree-sha1 = "89f5c8110f784cacec900e996e81c1389ddd62a3"
 uuid = "aae01518-5342-5314-be14-df237901396f"
-version = "0.6.0+"
+version = "0.7.0"
 
 [[Base64]]
 uuid = "2a0f44e3-6c83-55bd-87e4-b1978d98bd5f"
@@ -87,9 +85,9 @@ uuid = "b77e0a4c-d291-57a0-90e8-8db25a27a240"
 
 [[LazyArrays]]
 deps = ["FillArrays", "LinearAlgebra", "StaticArrays", "Test"]
-git-tree-sha1 = "de7192bdb7325211d479ded22c5391dddde6c623"
+git-tree-sha1 = "44fcd4f946a1e4cc302568eb6c7aba2bfc161911"
 uuid = "5078a376-72f3-5289-bfd5-ec5146d43c02"
-version = "0.2.1"
+version = "0.3.1"
 
 [[LibGit2]]
 uuid = "76f85450-5226-5b5a-8eaa-529ad045b433"
@@ -103,12 +101,12 @@ uuid = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 
 [[LinearMaps]]
 deps = ["LinearAlgebra", "SparseArrays", "Test"]
-git-tree-sha1 = "c5b4fb2d2b47cce577ea9240066c2fe4c26bf121"
+git-tree-sha1 = "580bb0efbfe0082c4fb0ce8dbf6548872c3b604c"
 uuid = "7a12625a-238d-50fd-b39a-03d52299707e"
-version = "2.2.0"
+version = "2.2.2"
 
 [[LiterateOrg]]
-deps = ["Dates", "Pkg", "Printf", "Test"]
+deps = ["Test"]
 git-tree-sha1 = "c380c181a4be762f4033c4bce87637eaac6b523d"
 uuid = "a7ef59f1-ab8a-5612-8cbe-0c3d3c126043"
 version = "0.1.0"
@@ -140,7 +138,7 @@ deps = ["Serialization"]
 uuid = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
 
 [[RecipesBase]]
-deps = ["Pkg", "Random", "Test"]
+deps = ["Random", "Test"]
 git-tree-sha1 = "0b3cb370ee4dc00f47f1193101600949f3dcf884"
 uuid = "3cdcf5f2-1ef4-517c-9805-6587b60abb01"
 version = "0.6.0"
@@ -164,9 +162,9 @@ uuid = "2f01184e-e22b-5df5-ae63-d93ebab69eaf"
 
 [[SpecialFunctions]]
 deps = ["BinDeps", "BinaryProvider", "Libdl", "Test"]
-git-tree-sha1 = "c35c9c76008babf4d658060fc64aeb369a41e7bd"
+git-tree-sha1 = "0b45dc2e45ed77f445617b99ff2adf0f5b0f23ea"
 uuid = "276daf66-3868-5448-9aa4-cd146d93841b"
-version = "0.7.1"
+version = "0.7.2"
 
 [[SphericalOperators]]
 deps = ["LinearAlgebra", "LiterateOrg", "Printf", "SparseArrays", "Test"]
@@ -178,9 +176,9 @@ version = "0.1.0"
 
 [[StaticArrays]]
 deps = ["InteractiveUtils", "LinearAlgebra", "Random", "Statistics", "Test"]
-git-tree-sha1 = "d432c79bef174a830304f8601427a4357dfdbfb7"
+git-tree-sha1 = "ebc5c2a27d91d5ec611a9861168182e2168effd3"
 uuid = "90137ffa-7385-5640-81b9-e52037218182"
-version = "0.8.3"
+version = "0.9.2"
 
 [[Statistics]]
 deps = ["LinearAlgebra", "SparseArrays"]
