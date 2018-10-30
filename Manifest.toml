@@ -79,6 +79,14 @@ git-tree-sha1 = "d87b7fc5c086cf157deabec625d53ba55eca6436"
 uuid = "1a297f60-69ca-5386-bcde-b61e274b549b"
 version = "0.3.0"
 
+[[FiniteDifferences]]
+deps = ["LinearAlgebra", "SparseArrays"]
+git-tree-sha1 = "777fc015960c7cc25438de8f4e2962984eb36d1e"
+repo-rev = "master"
+repo-url = "https://github.com/jagot/FiniteDifferences.jl.git"
+uuid = "05ffbe36-db6d-11e8-0580-4b496c61a72d"
+version = "0.1.0"
+
 [[InteractiveUtils]]
 deps = ["LinearAlgebra", "Markdown"]
 uuid = "b77e0a4c-d291-57a0-90e8-8db25a27a240"

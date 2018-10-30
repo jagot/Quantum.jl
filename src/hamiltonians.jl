@@ -4,13 +4,18 @@ using SphericalOperators
 import SphericalOperators: ord
 
 import FEDVR: basecount, kinop
-using BlockMaps
 using BandedMatrices
 
 basecount(basis::FEDVR.Basis) = basecount(basis.grid)
 basecount(basis::BSplines.Basis) = length(basis.t) - BSplines.order(basis.t)
+basecount(basis::FiniteDifferences.Basis) = length(basis.j)
+
+derop(basis::BSplines.Basis,o) = BSplines.derop(basis, o)
+derop(basis::FEDVR.Basis,o) = FEDVR.derop(basis, o)
+derop(basis::FiniteDifferences.Basis,o) = FiniteDifferences.derop(basis,o)
 
 kinop(basis::BSplines.Basis) = -BSplines.derop(basis, 2)/2
+kinop(basis::FiniteDifferences.Basis) = FiniteDifferences.derop(basis, 2) / -2
 
 function hamiltonian(basis::RBasis, L::AbstractSphericalBasis,
                      V::Function=coulomb(1.0),
@@ -19,20 +24,10 @@ function hamiltonian(basis::RBasis, L::AbstractSphericalBasis,
     @assert nᵣ == size(L,2)
     M = prod(size(L))
 
-    T = kinop(basis) # One-body operator, identical for all partial waves
-    if typeof(basis) <: FEDVR.Basis
-        # T = BlockMaps.banded(T) # This wastes approximately half the size on zeroes
-        T = sparse(T)
-    end
+    T = sparse(kinop(basis)) # One-body operator, identical for all partial waves
     rsel = 1:nᵣ
 
-    # H₀ = BandedMatrix(Zeros(M,M), bandwidths(T))
     H₀ = spzeros(M,M)
-    # H₀ = if typeof(basis) <: FEDVR.Basis
-    #     spzeros(M,M)
-    # else
-    #     BandedMatrix(Zeros(M,M), bandwidths(T))
-    # end
 
     for ℓ in eachℓ(L)
         Vℓ = basis(V(ℓ))
