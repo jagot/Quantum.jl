@@ -85,7 +85,7 @@ function ∂ᵣ(basis::RBasis, L::AbstractSphericalBasis, component=:z,
     """Dipole interaction Hamiltonian (differential part) in the
     velocity gauge Ĥᵢ(t) = 𝓐(t)⋅p, where p = -im*[∂x,∂y,∂z]."""
     interaction_common(basis, L, component, O) do
-        ∂ᵣop = derop(basis, 1)
+        ∂ᵣop = sparse(derop(basis, 1))
         𝔞𝔟 = ℓ -> ∂ᵣop
         𝔞𝔟,𝔞𝔟
     end
