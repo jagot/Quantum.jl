@@ -10,12 +10,14 @@ basecount(basis::FEDVR.Basis) = basecount(basis.grid)
 basecount(basis::BSplines.Basis) = length(basis.t) - BSplines.order(basis.t)
 basecount(basis::FiniteDifferences.Basis) = length(basis.j)
 
-derop(basis::BSplines.Basis,o) = BSplines.derop(basis, o)
-derop(basis::FEDVR.Basis,o) = FEDVR.derop(basis, o)
-derop(basis::FiniteDifferences.Basis,o) = FiniteDifferences.derop(basis,o)
+derop(::Type{T},basis::BSplines.Basis,o) where T = BSplines.derop(T,basis, o)
+derop(::Type{T},basis::FEDVR.Basis,o) where T = FEDVR.derop(T,basis, o)
+derop(::Type{T},basis::FiniteDifferences.Basis,o) where T = FiniteDifferences.derop(T,basis,o)
+derop(basis, o) = derop(eltype(basis), basis, o)
 
-kinop(basis::BSplines.Basis) = -BSplines.derop(basis, 2)/2
-kinop(basis::FiniteDifferences.Basis) = FiniteDifferences.derop(basis, 2) / -2
+kinop(::Type{T}, basis::BSplines.Basis) where T = -BSplines.derop(T, basis, 2)/2
+kinop(::Type{T}, basis::FiniteDifferences.Basis) where T = FiniteDifferences.derop(T, basis, 2) / -2
+kinop(basis) = kinop(eltype(basis), basis)
 
 function hamiltonian(basis::RBasis, L::AbstractSphericalBasis,
                      V::Function=coulomb(1.0),
