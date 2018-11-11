@@ -14,9 +14,9 @@ version = "0.1.0"
 
 [[BandedMatrices]]
 deps = ["FillArrays", "LazyArrays", "LinearAlgebra", "Random", "SparseArrays", "Test"]
-git-tree-sha1 = "89f5c8110f784cacec900e996e81c1389ddd62a3"
+git-tree-sha1 = "d3c8a883d5470def5f5a2b3c5b20ea5080d325e8"
 uuid = "aae01518-5342-5314-be14-df237901396f"
-version = "0.7.0"
+version = "0.7.2"
 
 [[Base64]]
 uuid = "2a0f44e3-6c83-55bd-87e4-b1978d98bd5f"
@@ -33,13 +33,17 @@ git-tree-sha1 = "9930c1a6cd49d9fcd7218df6be417e6ae4f1468a"
 uuid = "b99e7846-7c00-51b0-8f62-c81ae34c0232"
 version = "0.5.2"
 
-[[BlockMaps]]
-deps = ["BandedMatrices", "LinearAlgebra", "LinearMaps", "RecipesBase", "SparseArrays"]
-git-tree-sha1 = "acf1ab63af96dc39cf88658da346d8a99962198e"
-repo-rev = "master"
-repo-url = "https://github.com/jagot/BlockMaps.jl.git"
-uuid = "d8394ddc-3346-5325-9a2b-8a6d3660a8c1"
-version = "0.1.0"
+[[BlockArrays]]
+deps = ["Base64", "LinearAlgebra", "SparseArrays", "Test"]
+git-tree-sha1 = "274280f8a1163553d2a5ff87770a490047147e55"
+uuid = "8e7c35d0-a365-5155-bbbb-fb81a777f24e"
+version = "0.6.0"
+
+[[BlockBandedMatrices]]
+deps = ["BandedMatrices", "BlockArrays", "Distributed", "FillArrays", "LazyArrays", "LinearAlgebra", "Pkg", "Profile", "Random", "SharedArrays", "SparseArrays", "Statistics", "Test"]
+git-tree-sha1 = "91fb4c16507ddcbc2a8d9a78c7c4cdb8148cb7e2"
+uuid = "ffab5731-97b5-5995-9138-79e8c1846df0"
+version = "0.3.0"
 
 [[Compat]]
 deps = ["Base64", "Dates", "DelimitedFiles", "Distributed", "InteractiveUtils", "LibGit2", "Libdl", "LinearAlgebra", "Markdown", "Mmap", "Pkg", "Printf", "REPL", "Random", "Serialization", "SharedArrays", "Sockets", "SparseArrays", "Statistics", "Test", "UUIDs", "Unicode"]
@@ -60,8 +64,8 @@ deps = ["LinearAlgebra", "Random", "Serialization", "Sockets"]
 uuid = "8ba89e20-285c-5b6f-9357-94700520ee1b"
 
 [[FEDVR]]
-deps = ["BlockMaps", "FastGaussQuadrature", "LinearAlgebra", "LinearMaps", "RecipesBase", "SparseArrays", "Test"]
-git-tree-sha1 = "f496a514f883596642452d091966353f453a151c"
+deps = ["BlockBandedMatrices", "FastGaussQuadrature", "LinearAlgebra", "LinearMaps", "RecipesBase", "SparseArrays", "Test"]
+git-tree-sha1 = "8daad957a6fa07ff4af6f84a77522011666bbde0"
 repo-rev = "master"
 repo-url = "https://github.com/jagot/FEDVR.jl.git"
 uuid = "7f64dc6e-ccd1-5a31-8826-1dc29b280c7c"
@@ -81,7 +85,7 @@ version = "0.3.0"
 
 [[FiniteDifferences]]
 deps = ["LinearAlgebra", "SparseArrays"]
-git-tree-sha1 = "777fc015960c7cc25438de8f4e2962984eb36d1e"
+git-tree-sha1 = "1f35ca82a44ad9620b7eda41d72f27cd1eb46c48"
 repo-rev = "master"
 repo-url = "https://github.com/jagot/FiniteDifferences.jl.git"
 uuid = "05ffbe36-db6d-11e8-0580-4b496c61a72d"
@@ -93,9 +97,9 @@ uuid = "b77e0a4c-d291-57a0-90e8-8db25a27a240"
 
 [[LazyArrays]]
 deps = ["FillArrays", "LinearAlgebra", "StaticArrays", "Test"]
-git-tree-sha1 = "44fcd4f946a1e4cc302568eb6c7aba2bfc161911"
+git-tree-sha1 = "80ae09d512afe478575cadf7e301742996d0330d"
 uuid = "5078a376-72f3-5289-bfd5-ec5146d43c02"
-version = "0.3.1"
+version = "0.4.0"
 
 [[LibGit2]]
 uuid = "76f85450-5226-5b5a-8eaa-529ad045b433"
@@ -115,9 +119,9 @@ version = "2.2.2"
 
 [[LiterateOrg]]
 deps = ["Test"]
-git-tree-sha1 = "c380c181a4be762f4033c4bce87637eaac6b523d"
+git-tree-sha1 = "6a6cd78d68bde13f5f4761817c91576cbde032f9"
 uuid = "a7ef59f1-ab8a-5612-8cbe-0c3d3c126043"
-version = "0.1.0"
+version = "0.1.1"
 
 [[Logging]]
 uuid = "56ddb016-857b-54e1-b83d-db4d58db5568"
@@ -136,6 +140,10 @@ uuid = "44cfe95a-1eb2-52ea-b672-e2afdf69b78f"
 [[Printf]]
 deps = ["Unicode"]
 uuid = "de0858da-6303-5e67-8744-51eddeeeb8d7"
+
+[[Profile]]
+deps = ["Printf"]
+uuid = "9abbd945-dff8-562f-b5e8-e1ebf5ef1b79"
 
 [[REPL]]
 deps = ["InteractiveUtils", "Markdown", "Sockets"]
