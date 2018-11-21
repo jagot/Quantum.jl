@@ -18,6 +18,8 @@ end
 Wavefunction(basis::B, L::S) where {B,S} =
     Wavefunction(zeros(complex(eltype(basis)), prod(size(L))), basis, L)
 
+Wavefunction(ψ::Wavefunction) = Wavefunction(copy(ψ.vec), ψ.basis, ψ.L)
+
 function Wavefunction(ϕ::Eigenstate{T}, ::Type{O}=LexicalOrdering) where {T,O}
     C = complex(T)
     vec = zeros(C,prod(size(ϕ.L)))
