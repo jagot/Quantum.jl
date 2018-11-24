@@ -11,27 +11,27 @@ using Printf
 
 struct Wavefunction{T<:Complex,B<:RBasis,S<:AbstractSphericalBasis} <: AbstractVector{T}
     vec::Vector{T}
-    basis::B
+    R::B
     L::S
 end
 
-Wavefunction(basis::B, L::S) where {B,S} =
-    Wavefunction(zeros(complex(eltype(basis)), prod(size(L))), basis, L)
+Wavefunction(R::B, L::S) where {B,S} =
+    Wavefunction(zeros(complex(eltype(R)), prod(size(L))), R, L)
 
-Wavefunction(ψ::Wavefunction) = Wavefunction(copy(ψ.vec), ψ.basis, ψ.L)
+Wavefunction(ψ::Wavefunction) = Wavefunction(copy(ψ.vec), ψ.R, ψ.L)
 
 function Wavefunction(ϕ::Eigenstate{T}, ::Type{O}=LexicalOrdering) where {T,O}
     C = complex(T)
     vec = zeros(C,prod(size(ϕ.L)))
     vec[ord(ϕ.L,O,ϕ.ℓ,ϕ.m,1:size(ϕ.L,2))] = ϕ.vec
-    Wavefunction(vec, ϕ.basis, ϕ.L)
+    Wavefunction(vec, ϕ.R, ϕ.L)
 end
 
 (ψ::Wavefunction)(ℓ::Integer,m::Integer, ::Type{O}=LexicalOrdering) where O =
     view(ψ, ord(ψ.L,LexicalOrdering,ℓ,m,1:size(ψ.L,2)))
 
 size(ψ::Wavefunction, args...) = size(ψ.vec, args...)
-similar(ψ::Wavefunction) = Wavefunction(similar(ψ.vec), ψ.basis, ψ.L)
+similar(ψ::Wavefunction) = Wavefunction(similar(ψ.vec), ψ.R, ψ.L)
 
 for op in [:getindex, :setindex!, :view, :reshape]
     @eval $op(ψ::Wavefunction, args...) = $op(ψ.vec, args...)
@@ -43,7 +43,9 @@ reshape(ψ::Wavefunction, ::Colon, i::Int) where N =
 reshape(ψ::Wavefunction, shape::NTuple{N,<:Int}) where N =
     reshape(ψ.vec, shape)
 
-norm(ψ::Wavefunction) = norm(ψ.vec, ψ.basis)
+channels(ψ::Wavefunction) = reshape(ψ, :, size(ψ.L,1))
+
+norm(ψ::Wavefunction) = norm(ψ.vec, ψ.R)
 normalize!(ψ::Wavefunction) = normalize!(ψ.vec)
 
 ⋅(a::Wavefunction,b::Wavefunction) = a.vec⋅b.vec
