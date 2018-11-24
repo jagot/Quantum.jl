@@ -9,8 +9,16 @@ BSplines = "8759ff0c-cd99-11e8-1c1c-d94a817e6fcc"
 BandedMatrices = "aae01518-5342-5314-be14-df237901396f"
 FEDVR = "7f64dc6e-ccd1-5a31-8826-1dc29b280c7c"
 FiniteDifferences = "05ffbe36-db6d-11e8-0580-4b496c61a72d"
+IntervalSets = "8197267c-284f-5f27-9208-e0e47529a953"
 LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 LinearMaps = "7a12625a-238d-50fd-b39a-03d52299707e"
 Printf = "de0858da-6303-5e67-8744-51eddeeeb8d7"
 SparseArrays = "2f01184e-e22b-5df5-ae63-d93ebab69eaf"
 SphericalOperators = "0740b0f4-c400-11e8-2cb9-2f360bf4d2ec"
+
+[extras]
+Statistics = "10745b16-79ce-11e8-11f9-7d13ad32a3b2"
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Statistics", "Test"]
