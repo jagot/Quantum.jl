@@ -124,8 +124,10 @@ uuid = "7a12625a-238d-50fd-b39a-03d52299707e"
 version = "2.2.2"
 
 [[LiterateOrg]]
-deps = ["Test"]
-git-tree-sha1 = "6a6cd78d68bde13f5f4761817c91576cbde032f9"
+deps = ["Dates", "Printf", "Test"]
+git-tree-sha1 = "8d3076a372ec8e7bb831c155085b1b008720b4ec"
+repo-rev = "master"
+repo-url = "https://github.com/jagot/LiterateOrg.jl.git"
 uuid = "a7ef59f1-ab8a-5612-8cbe-0c3d3c126043"
 version = "0.1.1"
 
